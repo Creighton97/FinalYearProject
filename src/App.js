@@ -1,6 +1,6 @@
 //import logo from './logo.svg';
 import './App.css';
-import Amplify, {API,graphqlOperation} from 'aws-amplify';
+import Amplify, {API,graphqlOperation,Interactions}from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react'
 import { useEffect } from 'react';
@@ -17,7 +17,23 @@ import { createNameDev } from './graphql/mutations';
 import awsExports from './aws-exports';
 import './index.css';
 
-
+/*
+Amplify.configure({
+  Auth: {
+    identityPoolId: 'eu-west-1:bfb1a422-e967-4476-b83e-58c05ce1cae9',
+    region: 'eu-west-1'
+  },
+  Interactions: {
+    bots: {
+      "BookAppointment": {
+        "name": "ScheduleAppointment",
+        "alias": "$ChattyBot",
+        "region": "eu-west-1",
+      },
+    }
+  }
+});
+*/
 Amplify.configure (awsExports);
 const initialState = { name: '', date: '', address:' '}
 
@@ -38,7 +54,7 @@ const App = () => {
       const BookingData = await API.graphql(graphqlOperation(getNameDev))
       const bookings = BookingData.data.listBookings.items
       setBooking(bookings)
-    } catch (err) { console.log('error fetching booking') }
+    } catch (err) { console.log('error fetching booking',err) }
   }
 
   async function AddBooking() {
@@ -61,10 +77,11 @@ const App = () => {
       <link rel="preconnect" href="https://fonts.gstatic.com"></link>
       <h2>Booking App</h2>
       <Navbar bg="dark" variant="dark">
-    <Navbar.Brand href="#home">Selection</Navbar.Brand>
+    <Navbar.Brand href="#home">Book</Navbar.Brand>
     <Nav className="mr-auto">
      
-      <Nav.Link href="#features">ChatBot</Nav.Link>
+      <Nav.Link href="/bookinglist">Bookings</Nav.Link>
+      
     </Nav>
     <Navbar.Collapse className="justify-content-end">
   </Navbar.Collapse>
